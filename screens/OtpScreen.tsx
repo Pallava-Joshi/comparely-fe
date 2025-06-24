@@ -16,8 +16,12 @@ export default function OtpScreen() {
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue });
 
   return (
-    <View className="flex-1 justify-center items-center px-4 bg-white">
-      <Text className="text-xl font-bold mb-6">You're One Step Away!</Text>
+    <View className="flex-1 justify-center items-center px-4 bg-[#FFFAF0]">
+      <Text className="text-2xl text-[#004738] font-bold mb-2">You're One Step Away!</Text>
+      <Text className="text-[#004738] text-base mb-6 text-center leading-5">
+        Enter the OTP to Grab{"\n"}Your Best Deal!
+      </Text>
+
       <CodeField
         ref={ref}
         {...props}
@@ -29,16 +33,19 @@ export default function OtpScreen() {
         renderCell={({ index, symbol, isFocused }) => (
           <View
             key={index}
-            className={`border w-10 h-12 rounded justify-center items-center mx-1 ${isFocused ? 'border-black' : 'border-gray-400'}`}
+            className={`border w-10 h-12 rounded justify-center items-center mx-1 ${
+              isFocused ? 'border-black' : 'border-gray-400'
+            }`}
             onLayout={getCellOnLayoutHandler(index)}
           >
             <Text className="text-xl">{symbol || (isFocused ? <Cursor /> : null)}</Text>
           </View>
         )}
       />
+
       <TouchableOpacity
         onPress={() => navigation.navigate('Home')}
-        className="bg-yellow-400 p-4 rounded mt-4 w-full"
+        className="bg-[#CBD402] p-4 rounded-2xl mt-4 w-3/4"
       >
         <Text className="text-center font-bold">Verify</Text>
       </TouchableOpacity>

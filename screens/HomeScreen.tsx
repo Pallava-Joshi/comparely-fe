@@ -1,12 +1,13 @@
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { products } from '../mock/product';
 import ProductCard from '../components/ProductCard';
+import Header from '../components/Header';
 
 export default function HomeScreen() {
   return (
     <ScrollView className="bg-[#FFFAF0]">
-      <View className="pt-12 pb-6">
-        <Text className="text-center text-xl font-bold mb-4">Compare Prices</Text>
+      <Header />
+      <View className="pb-6 px-4">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

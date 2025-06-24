@@ -1,59 +1,114 @@
+import { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Product } from '../mock/product';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { Product, StoreInfo } from '../mock/product';
+
+import BlinkitLogo from '../assets/stores/blinkit.png';
+import ZeptoLogo from '../assets/stores/zepto.png';
+import InstamartLogo from '../assets/stores/instamart.png';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 type Props = {
   product: Product;
 };
 
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'ProductDetails'>;
+
 const storeColors: Record<string, string> = {
-  blinkit: 'bg-yellow-300',
-  zepto: 'bg-pink-200',
-  jio: 'bg-blue-200',
-  instamart: 'bg-orange-200',
+  blinkit: '#FACC15',     // yellow
+  zepto: '#9333EA',       // purple
+  instamart: '#FB923C',   // orange
+};
+
+const storeLogos: Record<string, any> = {
+  blinkit: BlinkitLogo,
+  zepto: ZeptoLogo,
+  instamart: InstamartLogo,
 };
 
 export default function ProductCard({ product }: Props) {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NavigationProp>();
+  const [liked, setLiked] = useState(false);
+
+  const availableStores = product.stores.filter((s) => s.available);
+  const sortedStores = [...availableStores].sort((a, b) => a.price - b.price);
+  const lowestStore = sortedStores[0];
+  const otherStores = sortedStores.slice(1);
+  const storeColor = storeColors[lowestStore.name] || '#000';
 
   return (
-    <View className="bg-white p-4 rounded-xl mb-4 mx-4 shadow-sm">
-      <View className="flex-row items-center">
-        <Image source={{ uri: product.image }} className="w-20 h-20 rounded-md" />
-        <View className="ml-4 flex-1">
-          <Text className="text-base font-semibold">{product.title}</Text>
-          <View className="flex-row flex-wrap gap-1 mt-1">
-            {product.tags.map((tag) => (
-              <Text key={tag} className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                {tag}
-              </Text>
-            ))}
-          </View>
-        </View>
-      </View>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('ProductDetails', { productId: product.id })}
+      className="bg-white rounded-xl border border-gray-300 p-4 mr-4 w-48 relative"
+    >
+      {/* Heart Icon */}
+      <TouchableOpacity
+        onPress={() => setLiked(!liked)}
+        className="absolute top-2 right-2 z-10"
+      >
+        <Ionicons
+          name={liked ? 'heart' : 'heart-outline'}
+          size={20}
+          color={liked ? 'red' : 'gray'}
+        />
+      </TouchableOpacity>
 
-      <View className="mt-4 space-y-2">
-        {product.stores.map((store) => (
-          <View
-            key={store.name}
-            className={`flex-row justify-between items-center px-3 py-2 rounded-md ${storeColors[store.name]}`}
-          >
-            <Text className="font-medium capitalize">{store.name}</Text>
-            <Text className="font-semibold">
-              ₹{store.available ? store.price : '--'}
-            </Text>
-          </View>
+      {/* Product Image */}
+      <Image
+        source={product.image}
+        className="w-full h-24 mb-2 rounded"
+        resizeMode="contain"
+      />
+
+      {/* Product Title and Tags */}
+      <Text className="text-sm font-semibold text-[#004738] mb-1">{product.title}</Text>
+      <Text className="text-xs text-gray-600 mb-1">{product.tags.join(', ')}</Text>
+
+      {/* Star Rating */}
+      <View className="flex-row items-center mb-1">
+        {[...Array(3)].map((_, i) => (
+          <Ionicons
+            key={i}
+            name="star"
+            size={14}
+            color={storeColor}
+            style={{ marginRight: 2 }}
+          />
         ))}
       </View>
 
-      <TouchableOpacity
-        onPress={() => navigation.navigate('ProductDetails', { productId: product.id })}
-        className="mt-4 bg-green-500 py-2 rounded"
-      >
-        <Text className="text-center text-white font-bold">View</Text>
-      </TouchableOpacity>
-    </View>
+      {/* Lowest Price */}
+      <View className="flex-row items-center mb-2">
+        <Image
+          source={storeLogos[lowestStore.name]}
+          style={{ width: 20, height: 20, marginRight: 4 }}
+          resizeMode="contain"
+        />
+        <Text className="text-[#004738] font-bold text-sm">₹{lowestStore.price}</Text>
+      </View>
+
+      {/* Divider */}
+      <View className="border-t border-gray-200 my-2" />
+
+      {/* Other Stores - Side by Side */}
+      <View className="flex-row gap-2 flex-wrap">
+        {otherStores.map((store) => (
+          <View
+            key={store.name}
+            className="flex-row items-center bg-gray-100 rounded px-1 py-[2px]"
+          >
+            <Image
+              source={storeLogos[store.name]}
+              style={{ width: 14, height: 14, marginRight: 2 }}
+              resizeMode="contain"
+            />
+            <Text className="text-[10px] text-gray-600">₹{store.price}</Text>
+          </View>
+        ))}
+      </View>
+    </TouchableOpacity>
   );
 }

@@ -16,7 +16,7 @@ export default function LoginScreen() {
       <Text className="text-lg">Let’s Get You the Best Deal </Text>
       <Text className="text-lg mb-4">on Your Next Purchase !</Text>
       <TextInput
-        className="border p-3 rounded mb-4"
+        className="border p-3 rounded-xl mb-4"
         placeholder="Enter phone number"
         keyboardType="phone-pad"
         value={phone}

@@ -75,7 +75,7 @@ export default function ScrollingLogos() {
 const styles = StyleSheet.create({
   scrollContainer: {
     paddingVertical: 12,
-    marginVertical: 24
+    marginVertical: 18
   },
   contentContainer: {
     paddingHorizontal: 16,

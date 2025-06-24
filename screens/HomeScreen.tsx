@@ -21,6 +21,18 @@ export default function HomeScreen() {
         </ScrollView>
          <ScrollingLogos/>
       </View>
+
+      <View className="px-4">
+      <Text className="text-[#004738] text-xl font-bold mb-6">Maybe you'll like these...</Text>
+      <View className="flex-row flex-wrap justify-between">
+        {[...products, products[0]].slice(0, 4).map((product) => (
+          <View key={product.id + Math.random()} className="w-[48%] mb-4">
+            <ProductCard product={product} />
+          </View>
+        ))}
+      </View>
+    </View>
+
     </ScrollView>
   );
 }

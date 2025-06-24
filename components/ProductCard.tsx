@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { Product, StoreInfo } from '../mock/product';
+import { Product } from '../mock/product';
 
 import BlinkitLogo from '../assets/stores/blinkit.png';
 import ZeptoLogo from '../assets/stores/zepto.png';
@@ -80,14 +80,20 @@ export default function ProductCard({ product }: Props) {
         ))}
       </View>
 
-      {/* Lowest Price */}
-      <View className="flex-row items-center mb-2">
-        <Image
-          source={storeLogos[lowestStore.name]}
-          style={{ width: 20, height: 20, marginRight: 4 }}
-          resizeMode="contain"
-        />
-        <Text className="text-[#004738] font-bold text-sm">₹{lowestStore.price}</Text>
+      {/* Lowest Price + Add Button */}
+      <View className="flex-row items-center bg-[#FFFAF0] p-1 rounded-lg justify-between mb-2">
+        <View className="flex-row items-center">
+          <Image
+            source={storeLogos[lowestStore.name]}
+            style={{ width: 20, height: 20, marginRight: 4 }}
+            resizeMode="contain"
+          />
+          <Text className="text-[#004738] font-bold text-sm">₹{lowestStore.price}</Text>
+        </View>
+
+        <TouchableOpacity className="bg-green-500 w-7 h-7 rounded-lg items-center justify-center">
+          <Text className="text-white text-lg font-bold">+</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Divider */}
